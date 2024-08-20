@@ -10,6 +10,8 @@ import Foundation
 internal enum OKRouter {
     static var baseURL = URL(string: "http://localhost:11434")!
     
+    static var bearerToken: String?
+    
     case root
     case models
     case modelInfo(data: OKModelInfoRequestData)
@@ -62,7 +64,11 @@ internal enum OKRouter {
     }
     
     internal var headers: [String: String] {
-        ["Content-Type": "application/json"]
+        var headers = ["Content-Type": "application/json"]
+        if let token = OKRouter.bearerToken {
+            headers["Authorization"] = "Bearer \(token)"
+        }
+        return headers
     }
 }
 
