@@ -83,7 +83,10 @@ internal extension OKHTTPClient {
     
     func stream<T: Decodable>(request: URLRequest, with responseType: T.Type) -> AnyPublisher<T, Error> {
         let delegate = StreamingDelegate()
-        let session = URLSession(configuration: .default, delegate: delegate, delegateQueue: .main)
+        let sessionConfig = URLSessionConfiguration.default
+		    sessionConfig.timeoutIntervalForRequest = 120
+		    sessionConfig.timeoutIntervalForResource = 240.0
+        let session = URLSession(configuration: sessionConfig, delegate: delegate, delegateQueue: .main)
         
         let task = session.dataTask(with: request)
         task.resume()
